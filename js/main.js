@@ -11,7 +11,8 @@
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
   /* ---------- İletişim bilgileri ---------- */
-  const igDm = `https://ig.me/m/${SITE.instagram}`;
+  // ig.me kısa bağlantısı her cihazda açılmıyor; profil sayfası (Mesaj düğmesiyle) her yerde çalışır.
+  const igDm = `https://www.instagram.com/${SITE.instagram}/`;
   const wa = (text) => `https://wa.me/${SITE.whatsapp}${text ? `?text=${encodeURIComponent(text)}` : ''}`;
   const mapQuery = encodeURIComponent(`${SITE.name}, ${SITE.address}`);
   $$('[data-address]').forEach((e) => (e.textContent = SITE.address));

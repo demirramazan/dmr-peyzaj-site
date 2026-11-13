@@ -80,7 +80,7 @@
     const text = `Merhaba, web sitenizden sipariş vermek istiyorum:\n${lines.join('\n')}\nToplam: ${$('#cartTotal').textContent}`;
     if (SITE.whatsapp) { window.open(`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(text)}`, '_blank', 'noopener'); return; }
     try { await navigator.clipboard.writeText(text); } catch { /* yoksay */ }
-    window.open(`https://ig.me/m/${SITE.instagram}`, '_blank', 'noopener');
+    window.open(`https://www.instagram.com/${SITE.instagram}/`, '_blank', 'noopener');
   });
   renderCart();
 })();
