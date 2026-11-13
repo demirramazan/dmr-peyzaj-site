@@ -183,7 +183,7 @@ const NURSERY_IMAGES = [3, 6, 4, 10, 8, 5, 11, 12, 9, 2];
    - price: TL cinsinden sayı; null ise "Fiyat için sorun" yazar.
    ========================================================= */
 const SHOP = {
-  enabled: false,
+  enabled: true,
   currency: '₺',
   categories: [
     { id: 'all', label: 'Tümü' },
@@ -193,11 +193,32 @@ const SHOP = {
     { id: 'mevsimlik', label: 'Mevsimlik Çiçek' },
     { id: 'fidan', label: 'Fidan & Ağaç' },
   ],
-  // ÖRNEK ürünler — yayına almadan önce gerçek ürün, fiyat ve stokla değiştirin.
+  /* ÖDEME
+     mode: 'demo'     -> ödeme SİMÜLE edilir; hiçbir yere veri gitmez, para çekilmez (şu anki durum).
+           'whatsapp' -> ödeme adımı yok; sipariş WhatsApp mesajı olarak iletilir.
+           'provider' -> canlı ödeme. Sipariş `endpoint` adresine POST edilir; sunucunuz ödeme
+                         sağlayıcısında (iyzico, PayTR vb.) oturum açıp { url } döndürür ve müşteri
+                         sağlayıcının güvenli ödeme sayfasına yönlenir. Kart bilgisi bu siteye
+                         hiç gelmez. Ayrıntı: README.md
+     Mağaza kapalıyken (enabled: false) örneği görmek için: magaza.html?demo=1 */
+  payment: {
+    mode: 'demo',
+    providerName: 'iyzico',
+    endpoint: '',
+    methods: ['card', 'transfer', 'cod'], // kart, havale/EFT, kapıda ödeme
+    iban: '', // havale için; canlıya alırken doldurun
+  },
+  // Teslimat — ÖRNEK tutarlar
+  delivery: { pickup: true, fee: 150, freeOver: 1500, area: 'İstanbul içi' },
+  // ÖRNEK ürünler ve ÖRNEK fiyatlar — yayına almadan önce gerçek ürün, fiyat ve stokla değiştirin.
   products: [
-    { id: 'ornek-sukulent', name: 'Karışık Sukulent (örnek)', category: 'sukulent', price: null, unit: 'adet', stock: true, image: thumb('fidanlik', 10), text: 'Saksılı karışık sukulent çeşitleri.' },
-    { id: 'ornek-begonya', name: 'Begonya (örnek)', category: 'mevsimlik', price: null, unit: 'adet', stock: true, image: thumb('fidanlik', 3), text: 'Mevsimlik, bol çiçekli.' },
-    { id: 'ornek-kalatea', name: 'Kalatea (örnek)', category: 'ic-mekan', price: null, unit: 'adet', stock: true, image: thumb('fidanlik', 8), text: 'Yarı gölge seven salon bitkisi.' },
-    { id: 'ornek-zeytin', name: 'Bonsai Zeytin (örnek)', category: 'fidan', price: null, unit: 'adet', stock: true, image: thumb('fidanlik', 5), text: 'Formlu, saksılı zeytin ağacı.' },
+    { id: 'sukulent', name: 'Karışık Sukulent', category: 'sukulent', price: 120, unit: 'adet', stock: true, image: thumb('fidanlik', 10), text: 'Saksılı karışık sukulent çeşitleri.' },
+    { id: 'kaktus', name: 'Kaktüs & Aloe Seçkisi', category: 'sukulent', price: 180, unit: 'adet', stock: true, image: thumb('fidanlik', 4), text: 'Az su isteyen, güneş seven türler.' },
+    { id: 'begonya', name: 'Begonya', category: 'mevsimlik', price: 90, unit: 'adet', stock: true, image: thumb('fidanlik', 3), text: 'Mevsimlik, bol çiçekli.' },
+    { id: 'mevsimlik-kasa', name: 'Mevsimlik Çiçek Kasası', category: 'mevsimlik', price: 600, unit: 'kasa', stock: true, image: thumb('fidanlik', 6), text: 'Karışık renkli, bordür ve saksı için.' },
+    { id: 'kalatea', name: 'Kalatea', category: 'ic-mekan', price: 450, unit: 'adet', stock: true, image: thumb('fidanlik', 8), text: 'Yarı gölge seven salon bitkisi.' },
+    { id: 'askili', name: 'Askılı Saksı Bitkisi', category: 'ic-mekan', price: 350, unit: 'adet', stock: true, image: thumb('fidanlik', 11), text: 'Balkon ve teras için sarkan türler.' },
+    { id: 'yesillik', name: 'Dış Mekân Yeşillik', category: 'dis-mekan', price: 750, unit: 'adet', stock: false, image: thumb('fidanlik', 12), text: 'Bahçe ve teras için saksılı bitki.' },
+    { id: 'zeytin', name: 'Formlu Zeytin Ağacı', category: 'fidan', price: 4500, unit: 'adet', stock: true, image: thumb('fidanlik', 5), text: 'Bonsai formlu, saksılı.' },
   ],
 };

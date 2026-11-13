@@ -41,3 +41,27 @@ Sepet tarayıcıda saklanır, sipariş WhatsApp mesajı olarak iletilir (online 
 ## Görseller
 
 Fotoğraf ve video [@dmrpeyzajmimarlik](https://www.instagram.com/dmrpeyzajmimarlik/) Instagram hesabından alınmıştır.
+
+## Mağaza ve ödeme — şu anki durum: ÖRNEK (demo)
+
+Mağaza açık (`SHOP.enabled: true`) ama ödeme `SHOP.payment.mode: 'demo'`: ürünler ve fiyatlar temsilî, ödeme simüle edilir, hiçbir yere veri gitmez. Sayfanın üstünde turuncu "Örnek gösterim" şeridi görünür. Mağazayı tamamen gizlemek için `enabled: false` yapın (o zaman örnek yalnızca `magaza.html?demo=1` adresinden görünür).
+
+### Canlıya alma
+
+1. `SHOP.products` içindeki örnek ürün ve fiyatları, `SHOP.delivery` içindeki teslimat tutarlarını gerçekleriyle değiştirin.
+2. Ödeme modunu seçin (`SHOP.payment.mode`):
+   - `'whatsapp'` — en basit: kart adımı yok, sipariş WhatsApp mesajı olarak gelir; ödemeyi havale ya da kapıda alırsınız. Sunucu gerekmez.
+   - `'provider'` — kartla online ödeme. Bir ödeme sağlayıcısı (iyzico, PayTR, Param vb.) üyeliği ve küçük bir sunucu fonksiyonu gerekir (aşağıda).
+3. `magaza.html` içindeki `noindex` satırını silin.
+4. Yasal sayfaları ekleyin: Mesafeli Satış Sözleşmesi, Ön Bilgilendirme Formu, İade/İptal koşulları, KVKK aydınlatma metni. Ödeme sağlayıcıları başvuruda bunları ve şirket/vergi bilgilerini ister.
+
+### `'provider'` modu nasıl çalışır
+
+Kart bilgisi bu siteye hiç gelmez; statik bir site gizli API anahtarı tutamayacağı için arada küçük bir sunucu fonksiyonu olmalıdır (Cloudflare Workers, Netlify/Vercel Functions gibi ücretsiz katmanlar yeterli):
+
+1. Müşteri "Öde"ye basar → `js/shop.js` siparişi `SHOP.payment.endpoint` adresine JSON olarak POST eder (`no`, `items`, `total`, `customer` …).
+2. Sunucu fonksiyonu fiyatları **kendi ürün listesinden yeniden hesaplar** (tarayıcıdan gelen tutara güvenilmez), sağlayıcının API'sinde ödeme oturumu açar ve `{ "url": "…" }` döndürür.
+3. Site müşteriyi sağlayıcının güvenli ödeme sayfasına yönlendirir; 3D Secure orada yapılır.
+4. Sağlayıcı ödeme sonucunu sunucu fonksiyonuna bildirir (callback/webhook) ve müşteriyi siteye geri gönderir.
+
+Sitede değişecek tek yer `js/data.js` içindeki `payment` bloğudur (`mode`, `providerName`, `endpoint`, `iban`).

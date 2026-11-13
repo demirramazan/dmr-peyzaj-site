@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Fidan & Çiçek Mağazası — DMR Peyzaj Mimarlık</title>
-  <meta name="robots" content="noindex"><!-- Mağaza açıldığında bu satırı silin -->
+  <meta name="robots" content="noindex"><!-- Mağaza gerçek satışa açıldığında bu satırı silin -->
+  <meta name="theme-color" content="#2f4a23">
   <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,7 +13,9 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="shop-page">
-  <header class="header scrolled">
+  <div class="demo-bar" id="demoBar" hidden>Örnek gösterim: ürünler ve fiyatlar temsilidir, gerçek sipariş alınmaz ve ödeme çekilmez.</div>
+
+  <header class="header scrolled shop-header">
     <a class="brand" href="index.html" aria-label="DMR Peyzaj Mimarlık ana sayfa">
       <img src="assets/logo.svg" alt="" width="46" height="46">
       <span><b>DMR</b><small>Peyzaj Mimarlık</small></span>
@@ -21,12 +24,12 @@
       <a href="index.html#projeler">Projeler</a>
       <a href="index.html#fidanlik">Fidanlık</a>
       <a href="index.html#iletisim">İletişim</a>
-      <button class="btn btn-primary nav-cta" id="cartBtn" type="button" hidden>Sepet <span id="cartCount">0</span></button>
+      <button class="btn btn-primary nav-cta" id="cartBtn" type="button" hidden>Sepet <span class="cart-badge" id="cartCount">0</span></button>
     </nav>
   </header>
 
   <main class="shop-main wrap">
-    <!-- Mağaza kapalıyken görünen bölüm -->
+    <!-- Mağaza kapalıyken -->
     <section class="soon" id="shopSoon" hidden>
       <p class="eyebrow">Fidan & Çiçek</p>
       <h1>Online satış <em>çok yakında</em></h1>
@@ -34,12 +37,72 @@
       <div class="hero-actions"><a class="btn btn-primary" href="index.html#fidanlik">Fidanlığı gör</a><a class="btn btn-ghost" href="index.html#iletisim">İletişim</a></div>
     </section>
 
-    <!-- Mağaza açıkken görünen bölüm -->
-    <section id="shopOpen" hidden>
-      <p class="eyebrow">Botanik Fidanlık</p>
+    <!-- 1) Ürünler -->
+    <section id="viewCatalog" hidden>
+      <p class="eyebrow">Botanik Fidanlık · Kartal</p>
       <h1>Fidan & <em>Çiçek</em></h1>
-      <div class="filters shop-filters" id="shopFilters" role="tablist"></div>
+      <p class="lead shop-lead" id="deliveryNote"></p>
+      <div class="filters shop-filters" id="shopFilters" role="tablist" aria-label="Kategori"></div>
       <div class="products" id="productGrid"></div>
+    </section>
+
+    <!-- 2) Teslimat + ödeme -->
+    <section id="viewCheckout" hidden>
+      <button class="link back" id="backToShop" type="button">← Alışverişe dön</button>
+      <h1>Siparişi <em>tamamla</em></h1>
+      <ol class="co-steps" id="coSteps"><li>Teslimat</li><li>Ödeme</li><li>Onay</li></ol>
+      <div class="co">
+        <form class="co-form" id="coForm" novalidate>
+          <fieldset id="stepDelivery">
+            <legend>Teslimat</legend>
+            <div class="opts" id="deliveryOpts"></div>
+            <div class="co-grid">
+              <label>Ad Soyad<input name="ad" autocomplete="name" required></label>
+              <label>Telefon<input name="tel" type="tel" inputmode="tel" autocomplete="tel" required></label>
+            </div>
+            <div id="addressFields">
+              <label>Adres<textarea name="adres" rows="2" autocomplete="street-address"></textarea></label>
+              <div class="co-grid">
+                <label>İlçe<input name="ilce" autocomplete="address-level2"></label>
+                <label>Sipariş notu<input name="not" placeholder="İsteğe bağlı"></label>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-block" type="button" id="toPayment">Ödemeye geç</button>
+          </fieldset>
+
+          <fieldset id="stepPayment" hidden>
+            <legend>Ödeme</legend>
+            <div class="opts" id="payOpts"></div>
+            <div class="pay-panel" id="payPanel"></div>
+            <button class="btn btn-primary btn-block" type="submit" id="payBtn">Ödemeyi tamamla</button>
+            <button class="link back" type="button" id="backToDelivery">← Teslimata dön</button>
+          </fieldset>
+          <p class="form-note" id="coNote" role="status"></p>
+        </form>
+
+        <aside class="co-summary" aria-label="Sipariş özeti">
+          <h3>Sipariş özeti</h3>
+          <ul class="sum-items" id="sumItems"></ul>
+          <dl class="sum-totals">
+            <div><dt>Ara toplam</dt><dd id="sumSub"></dd></div>
+            <div><dt>Teslimat</dt><dd id="sumShip"></dd></div>
+            <div class="sum-grand"><dt>Toplam</dt><dd id="sumTotal"></dd></div>
+          </dl>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 3) Onay -->
+    <section class="done" id="viewDone" hidden>
+      <div class="done-mark" aria-hidden="true">✓</div>
+      <p class="eyebrow" id="doneTag"></p>
+      <h1>Siparişiniz <em>alındı</em></h1>
+      <p class="lead" id="doneText"></p>
+      <dl class="done-box" id="doneBox"></dl>
+      <div class="hero-actions">
+        <a class="btn btn-primary" id="doneWa" target="_blank" rel="noopener" hidden>Siparişi WhatsApp’tan bildir</a>
+        <a class="btn btn-ghost" href="magaza.html" id="doneBack">Alışverişe dön</a>
+      </div>
     </section>
   </main>
 
@@ -47,9 +110,8 @@
     <div class="cart-head"><h3>Sepetiniz</h3><button class="modal-close" id="cartClose" aria-label="Sepeti kapat">×</button></div>
     <ul class="cart-items" id="cartItems"></ul>
     <div class="cart-foot">
-      <p class="cart-total"><span>Toplam</span><b id="cartTotal"></b></p>
-      <button class="btn btn-primary btn-block" id="cartOrder" type="button">Siparişi gönder</button>
-      <p class="form-note">Siparişiniz mesaj olarak iletilir; ödeme ve teslimat için sizi arayacağız.</p>
+      <p class="cart-total"><span>Ara toplam</span><b id="cartTotal"></b></p>
+      <button class="btn btn-primary btn-block" id="cartCheckout" type="button">Siparişi tamamla</button>
     </div>
   </aside>
 

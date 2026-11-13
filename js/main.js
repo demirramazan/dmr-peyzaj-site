@@ -34,8 +34,23 @@
   const fab = $('[data-fab]');
   fab.href = SITE.whatsapp ? wa('Merhaba, peyzaj hizmetleriniz hakkında bilgi almak istiyorum.') : igDm;
   $('[data-fab-label]').textContent = SITE.whatsapp ? 'WhatsApp’tan yazın' : 'Instagram’dan yazın';
+  // WhatsApp varken Instagram mesajı da ikinci düğme olarak kalır.
+  if (SITE.whatsapp) {
+    fab.before(el('a', { class: 'fab fab-ig', href: igDm, target: '_blank', rel: 'noopener', 'aria-label': 'Instagram’dan yazın' },
+      '<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".9" fill="currentColor" stroke="none"/></svg><span>Instagram’dan yazın</span>'));
+  }
   $('#year').textContent = new Date().getFullYear();
-  if (typeof SHOP !== 'undefined' && SHOP.enabled) $$('[data-shop-link]').forEach((e) => (e.hidden = false));
+  if (typeof SHOP !== 'undefined' && SHOP.enabled) {
+    $$('[data-shop-link]').forEach((e) => (e.hidden = false));
+    // Fidanlık bölümüne mağaza düğmesi
+    const mapBtn = $('.nursery-foot [data-map-link]');
+    if (mapBtn) {
+      const group = el('div', { class: 'hero-actions', style: 'margin:0' });
+      mapBtn.replaceWith(group);
+      mapBtn.className = 'btn btn-ghost';
+      group.append(el('a', { class: 'btn btn-primary', href: 'magaza.html' }, 'Online mağazaya git'), mapBtn);
+    }
+  }
 
   /* ---------- Başlık & menü ---------- */
   const header = $('#header');
@@ -217,6 +232,7 @@
   const form = $('#contactForm');
   const note = $('#formNote');
   $('#formSubmit').textContent = SITE.whatsapp ? 'WhatsApp ile gönder' : 'Talebi gönder';
+  if (SITE.whatsapp) $('#formSubmit').after(el('button', { class: 'btn btn-ghost btn-block', type: 'submit', 'data-via': 'ig' }, 'Instagram’dan gönder'));
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const f = new FormData(form);
@@ -229,7 +245,8 @@
     });
     if (!ok) { note.textContent = 'Lütfen adınızı ve telefonunuzu yazın.'; return; }
     const text = `Merhaba, web sitenizden yazıyorum.\nAd: ${f.get('ad')}\nTelefon: ${f.get('tel')}\nHizmet: ${f.get('hizmet')}\n${f.get('mesaj') ? `Not: ${f.get('mesaj')}` : ''}`.trim();
-    if (SITE.whatsapp) {
+    const viaIg = e.submitter && e.submitter.dataset.via === 'ig';
+    if (SITE.whatsapp && !viaIg) {
       window.open(wa(text), '_blank', 'noopener');
       note.textContent = 'WhatsApp açılıyor; mesajı göndermeniz yeterli.';
       return;
