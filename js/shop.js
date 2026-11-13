@@ -79,8 +79,8 @@
     const lines = Object.keys(cart).map((id) => { const p = byId(id); return `• ${cart[id]} × ${p.name}${p.price != null ? ` (${money(p.price * cart[id])})` : ''}`; });
     const text = `Merhaba, web sitenizden sipariş vermek istiyorum:\n${lines.join('\n')}\nToplam: ${$('#cartTotal').textContent}`;
     if (SITE.whatsapp) { window.open(`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(text)}`, '_blank', 'noopener'); return; }
-    try { await navigator.clipboard.writeText(text); } catch { /* yoksay */ }
-    window.open(`https://www.instagram.com/${SITE.instagram}/`, '_blank', 'noopener');
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).catch(() => {});
+    window.open(`https://www.instagram.com/m/${SITE.instagram}`, '_blank', 'noopener');
   });
   renderCart();
 })();

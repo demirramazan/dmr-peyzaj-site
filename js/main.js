@@ -11,8 +11,8 @@
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
   /* ---------- İletişim bilgileri ---------- */
-  // ig.me kısa bağlantısı her cihazda açılmıyor; profil sayfası (Mesaj düğmesiyle) her yerde çalışır.
-  const igDm = `https://www.instagram.com/${SITE.instagram}/`;
+  // Doğrudan mesaj (DM) sohbetini açan bağlantı. Giriş yapılmamışsa Instagram önce giriş ister, sonra sohbete götürür.
+  const igDm = `https://www.instagram.com/m/${SITE.instagram}`;
   const wa = (text) => `https://wa.me/${SITE.whatsapp}${text ? `?text=${encodeURIComponent(text)}` : ''}`;
   const mapQuery = encodeURIComponent(`${SITE.name}, ${SITE.address}`);
   $$('[data-address]').forEach((e) => (e.textContent = SITE.address));
@@ -217,7 +217,7 @@
   const form = $('#contactForm');
   const note = $('#formNote');
   $('#formSubmit').textContent = SITE.whatsapp ? 'WhatsApp ile gönder' : 'Talebi gönder';
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
     const f = new FormData(form);
     let ok = true;
@@ -234,9 +234,12 @@
       note.textContent = 'WhatsApp açılıyor; mesajı göndermeniz yeterli.';
       return;
     }
-    try { await navigator.clipboard.writeText(text); note.textContent = 'Mesajınız kopyalandı. Açılan Instagram sohbetine yapıştırıp gönderin.'; }
-    catch { note.textContent = 'Instagram sohbeti açılıyor; bilgilerinizi oradan iletebilirsiniz.'; }
+    // Önce sohbeti aç (beklemeden): araya bekleme girerse mobil tarayıcılar yeni sekmeyi engelliyor.
+    const copied = navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(text) : Promise.reject();
     window.open(igDm, '_blank', 'noopener');
+    copied
+      .then(() => (note.textContent = 'Mesajınız kopyalandı. Açılan Instagram sohbetine yapıştırıp gönderin.'))
+      .catch(() => (note.textContent = 'Instagram sohbeti açıldı; bilgilerinizi oradan iletebilirsiniz.'));
   });
 
   /* ---------- Kaydırınca belirme ---------- */
