@@ -11,8 +11,8 @@ const SITE = {
   address: 'Çarşı, Akkan Sk. No:4, 34876 Kartal / İstanbul',
   // Telefon ve WhatsApp numarasını girin (ör. phone: '+90 5xx xxx xx xx', whatsapp: '905xxxxxxxxx').
   // Boş bırakılırsa telefon/WhatsApp düğmeleri gizlenir ve form Instagram DM'e yönlenir.
-  phone: '',
-  whatsapp: '',
+  phone: '+90 534 981 00 18',
+  whatsapp: '905349810018',
   email: '',
 };
 
