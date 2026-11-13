@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fidan & Çiçek Mağazası — DMR Peyzaj Mimarlık</title>
+  <meta name="robots" content="noindex"><!-- Mağaza açıldığında bu satırı silin -->
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="shop-page">
+  <header class="header scrolled">
+    <a class="brand" href="index.html" aria-label="DMR Peyzaj Mimarlık ana sayfa">
+      <img src="assets/logo.svg" alt="" width="40" height="40">
+      <span><b>DMR</b><small>Peyzaj Mimarlık</small></span>
+    </a>
+    <nav class="nav shop-nav" aria-label="Menü">
+      <a href="index.html#projeler">Projeler</a>
+      <a href="index.html#fidanlik">Fidanlık</a>
+      <a href="index.html#iletisim">İletişim</a>
+      <button class="btn btn-primary nav-cta" id="cartBtn" type="button" hidden>Sepet <span id="cartCount">0</span></button>
+    </nav>
+  </header>
+
+  <main class="shop-main wrap">
+    <!-- Mağaza kapalıyken görünen bölüm -->
+    <section class="soon" id="shopSoon" hidden>
+      <p class="eyebrow">Fidan & Çiçek</p>
+      <h1>Online satış <em>çok yakında</em></h1>
+      <p class="lead">Şimdilik bitkilerimizi Kartal’daki fidanlığımızda görebilir, bilgi için bize yazabilirsiniz.</p>
+      <div class="hero-actions"><a class="btn btn-primary" href="index.html#fidanlik">Fidanlığı gör</a><a class="btn btn-ghost" href="index.html#iletisim">İletişim</a></div>
+    </section>
+
+    <!-- Mağaza açıkken görünen bölüm -->
+    <section id="shopOpen" hidden>
+      <p class="eyebrow">Botanik Fidanlık</p>
+      <h1>Fidan & <em>Çiçek</em></h1>
+      <div class="filters shop-filters" id="shopFilters" role="tablist"></div>
+      <div class="products" id="productGrid"></div>
+    </section>
+  </main>
+
+  <aside class="cart" id="cart" aria-label="Sepet" hidden>
+    <div class="cart-head"><h3>Sepetiniz</h3><button class="modal-close" id="cartClose" aria-label="Sepeti kapat">×</button></div>
+    <ul class="cart-items" id="cartItems"></ul>
+    <div class="cart-foot">
+      <p class="cart-total"><span>Toplam</span><b id="cartTotal"></b></p>
+      <button class="btn btn-primary btn-block" id="cartOrder" type="button">Siparişi gönder</button>
+      <p class="form-note">Siparişiniz mesaj olarak iletilir; ödeme ve teslimat için sizi arayacağız.</p>
+    </div>
+  </aside>
+
+  <script src="js/data.js"></script>
+  <script src="js/shop.js"></script>
+</body>
+</html>
