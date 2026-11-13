@@ -1,8 +1,8 @@
 /* DMR Peyzaj Mimarlık */
 :root {
   --ink: #14201a;
-  --forest: #1d3a2c;
-  --forest-2: #254a38;
+  --forest: #24391d;
+  --forest-2: #2f4a23;
   --moss: #4d6b4a;
   --leaf: #b9cf9a;
   --cream: #f6f2e9;
@@ -53,7 +53,8 @@ button { font: inherit; cursor: pointer; }
 .header { position: fixed; inset: 0 0 auto 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 14px var(--pad); transition: background .3s, box-shadow .3s, padding .3s; }
 .header.scrolled { background: rgba(246, 242, 233, .92); backdrop-filter: blur(12px); box-shadow: 0 1px 0 var(--line); padding-block: 9px; }
 .brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; }
-.brand b { font-family: var(--serif); font-size: 1.35rem; font-weight: 600; letter-spacing: .06em; display: block; line-height: 1; }
+.brand b { font-family: var(--sans); font-size: 1.3rem; font-weight: 700; letter-spacing: .24em; display: block; line-height: 1; color: var(--forest-2); margin-bottom: 3px; }
+.footer .brand b { color: var(--leaf); }
 .brand small { font-size: .66rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
 .nav { display: flex; align-items: center; gap: clamp(14px, 2.2vw, 30px); }
 .nav a:not(.btn) { text-decoration: none; font-weight: 600; font-size: .94rem; position: relative; padding: 6px 0; }
