@@ -10,8 +10,12 @@
   const PAY = SHOP.payment;
   const DEL = SHOP.delivery;
   const isDemo = PAY.mode === 'demo';
-  $('#demoBar').hidden = !isDemo;
-  document.body.classList.toggle('has-demo-bar', isDemo);
+  const isWa = PAY.mode === 'whatsapp';
+  const showBar = isDemo || SHOP.sampleCatalog;
+  $('#demoBar').hidden = !showBar;
+  if (!isDemo && SHOP.sampleCatalog) $('#demoBar').textContent = 'Ürünler ve fiyatlar örnektir. Siparişler WhatsApp üzerinden alınır; ödeme havale veya kapıda yapılır.';
+  document.body.classList.toggle('has-demo-bar', showBar);
+  const confirmLabel = isWa ? 'WhatsApp ile sipariş ver' : 'Siparişi onayla';
   $('#cartBtn').hidden = false;
 
   const KEY = 'dmr-sepet';
@@ -128,11 +132,12 @@
         <p class="pay-info">Bu alan yalnızca örnektir ve değiştirilemez; kart bilgisi istenmez. Canlıda kart bilgileri ${esc(PAY.providerName)} güvenli ödeme sayfasında girilir, bu siteye hiç ulaşmaz.</p>`
         : `<p class="pay-info">“Öde” dediğinizde ${esc(PAY.providerName)} güvenli ödeme sayfasına yönlendirilirsiniz. Kart bilgileriniz bu sitede tutulmaz.</p>`;
     } else if (state.pay === 'transfer') {
-      btn.textContent = 'Siparişi onayla';
-      panel.innerHTML = `<p class="pay-info">${PAY.iban ? `IBAN: <b>${esc(PAY.iban)}</b><br>` : ''}Açıklamaya sipariş numaranızı yazın. ${PAY.iban ? '' : 'Hesap bilgileri sipariş onayında iletilir. '}Ödeme ulaşınca siparişiniz hazırlanır.</p>`;
+      btn.textContent = confirmLabel;
+      const ibanNote = PAY.iban ? '' : (isWa ? 'Hesap bilgileri WhatsApp’tan iletilir. ' : 'Hesap bilgileri sipariş onayında iletilir. ');
+      panel.innerHTML = `<p class="pay-info">${PAY.iban ? `IBAN: <b>${esc(PAY.iban)}</b><br>` : ''}Açıklamaya sipariş numaranızı yazın. ${ibanNote}Ödeme ulaşınca siparişiniz hazırlanır.</p>`;
     } else {
-      btn.textContent = 'Siparişi onayla';
-      panel.innerHTML = '<p class="pay-info">Ödemeyi teslimat sırasında nakit ya da kartla yaparsınız.</p>';
+      btn.textContent = confirmLabel;
+      panel.innerHTML = '<p class="pay-info">Ödemeyi teslim alırken nakit ya da kartla yaparsınız.</p>';
     }
   };
   const setStep = (n) => {
@@ -190,10 +195,13 @@
   ].filter(Boolean).join('\n');
   const finish = (o) => {
     cart = {}; renderCart();
-    $('#doneTag').textContent = isDemo ? 'Örnek sipariş — gerçek değildir' : 'Teşekkürler';
+    $('#doneTag').textContent = isDemo ? 'Örnek sipariş — gerçek değildir' : (isWa ? 'Son adım' : 'Teşekkürler');
+    $('#doneTitle').innerHTML = isWa && !isDemo ? 'Mesajı <em>gönderin</em>' : 'Siparişiniz <em>alındı</em>';
     $('#doneText').textContent = isDemo
       ? 'Ödeme simüle edildi; para çekilmedi ve hiçbir bilgi gönderilmedi. Canlıda müşteri bu ekranı ödeme onayından sonra görür.'
-      : (o.payment === 'card' ? 'Ödemeniz alındı. Siparişinizi hazırlayıp sizi arayacağız.' : 'Siparişinizi aldık; teslimat için sizi arayacağız.');
+      : isWa
+        ? 'WhatsApp’ta açılan sipariş mesajını gönderdiğinizde siparişiniz bize ulaşır; ödeme ve teslimat için sizinle iletişime geçeceğiz. Mesaj açılmadıysa aşağıdaki düğmeyi kullanın.'
+        : (o.payment === 'card' ? 'Ödemeniz alındı. Siparişinizi hazırlayıp sizi arayacağız.' : 'Siparişinizi aldık; teslimat için sizi arayacağız.');
     $('#doneBox').innerHTML = [
       ['Sipariş no', o.no], ['Toplam', money(o.total)],
       ['Teslimat', o.delivery === 'pickup' ? 'Fidanlıktan teslim' : 'Adrese teslimat'], ['Ödeme', METHODS[o.payment].title],

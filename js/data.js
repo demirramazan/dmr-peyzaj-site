@@ -184,6 +184,8 @@ const NURSERY_IMAGES = [3, 6, 4, 10, 8, 5, 11, 12, 9, 2];
    ========================================================= */
 const SHOP = {
   enabled: true,
+  // true iken mağaza üstünde "ürünler ve fiyatlar örnektir" şeridi görünür. Gerçek ürün ve fiyatları girince false yapın.
+  sampleCatalog: true,
   currency: '₺',
   categories: [
     { id: 'all', label: 'Tümü' },
@@ -194,18 +196,19 @@ const SHOP = {
     { id: 'fidan', label: 'Fidan & Ağaç' },
   ],
   /* ÖDEME
-     mode: 'demo'     -> ödeme SİMÜLE edilir; hiçbir yere veri gitmez, para çekilmez (şu anki durum).
-           'whatsapp' -> ödeme adımı yok; sipariş WhatsApp mesajı olarak iletilir.
+     mode: 'demo'     -> ödeme SİMÜLE edilir; hiçbir yere veri gitmez, para çekilmez.
+           'whatsapp' -> kartla ödeme yok; sipariş WhatsApp mesajı olarak iletilir, ödeme havale
+                         veya kapıda alınır (ŞU ANKİ DURUM).
            'provider' -> canlı ödeme. Sipariş `endpoint` adresine POST edilir; sunucunuz ödeme
                          sağlayıcısında (iyzico, PayTR vb.) oturum açıp { url } döndürür ve müşteri
                          sağlayıcının güvenli ödeme sayfasına yönlenir. Kart bilgisi bu siteye
                          hiç gelmez. Ayrıntı: README.md
      Mağaza kapalıyken (enabled: false) örneği görmek için: magaza.html?demo=1 */
   payment: {
-    mode: 'demo',
+    mode: 'whatsapp',
     providerName: 'iyzico',
     endpoint: '',
-    methods: ['card', 'transfer', 'cod'], // kart, havale/EFT, kapıda ödeme
+    methods: ['transfer', 'cod'], // 'transfer' havale/EFT, 'cod' kapıda ödeme; kartla ödeme açılınca başa 'card' eklenir
     iban: '', // havale için; canlıya alırken doldurun
   },
   // Teslimat — ÖRNEK tutarlar
