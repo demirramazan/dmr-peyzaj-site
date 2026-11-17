@@ -42,9 +42,11 @@ Sepet tarayıcıda saklanır, sipariş WhatsApp mesajı olarak iletilir (online 
 
 Fotoğraf ve video [@dmrpeyzajmimarlik](https://www.instagram.com/dmrpeyzajmimarlik/) Instagram hesabından alınmıştır.
 
-## Mağaza ve ödeme — şu anki durum: ÖRNEK (demo)
+## Mağaza ve ödeme — şu anki durum: WhatsApp siparişi
 
-Mağaza açık (`SHOP.enabled: true`) ama ödeme `SHOP.payment.mode: 'demo'`: ürünler ve fiyatlar temsilî, ödeme simüle edilir, hiçbir yere veri gitmez. Sayfanın üstünde turuncu "Örnek gösterim" şeridi görünür. Mağazayı tamamen gizlemek için `enabled: false` yapın (o zaman örnek yalnızca `magaza.html?demo=1` adresinden görünür).
+Mağaza açık (`SHOP.enabled: true`), ödeme `SHOP.payment.mode: 'whatsapp'`: kartla ödeme yok. Müşteri sepeti, teslimat şeklini ve ödeme yolunu (havale/EFT ya da kapıda ödeme) seçer; "WhatsApp ile sipariş ver" deyince sipariş hazır bir mesaj olarak `SITE.whatsapp` numarasına açılır, müşteri gönderince size ulaşır.
+
+Ürünler ve fiyatlar hâlâ örnek: `SHOP.sampleCatalog: true` olduğu için sayfanın üstünde "Ürünler ve fiyatlar örnektir" şeridi görünür. Gerçek ürünleri girince `sampleCatalog: false` yapın. Havale için `SHOP.payment.iban` doldurulursa ödeme adımında gösterilir. Mağazayı tamamen gizlemek için `enabled: false` yapın.
 
 ### Canlıya alma
 
